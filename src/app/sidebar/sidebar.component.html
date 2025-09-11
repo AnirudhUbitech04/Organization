@@ -1,0 +1,46 @@
+<div class="container-fluid">
+  <div class="row">
+
+  
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 bg-primary p-3 vh-100">
+      <h4 class="text-white">Modules</h4>
+      <ul class="list-unstyled mt-3">
+
+        <!-- Show only modules with status == 1 -->
+        <li *ngFor="let u of users" class="mb-2" >
+          <a class="text-white text-decoration-none" *ngIf="u.status == 1"
+             (click)="selectModule(u.module_name, u.mod_id, u.org_id, u.status)">
+            {{ u.module_name.toLocaleUpperCase() }}
+          </a>
+        </li>
+
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9 col-lg-10 p-4">
+      
+      <div class="d-flex  align-items-center mb-4">
+      <h2>Welcome, {{ loggedInUser?.name }}</h2> <br>
+   </div>
+    
+   
+   <div><p *ngIf="!selectedModule">Select a module from the sidebar to start registration.</p>
+      <div *ngIf="loggedInUser" ></div>
+    
+    
+   
+    <!-- <button class="btn btn-danger btn-sm" (click)="logout()">Logout</button> -->
+  </div>
+
+      <app-dynamic-form *ngIf="selectedModule && selectedModuleId && selectedOrgId"
+        [moduleName]="selectedModule"
+        [mod_id]="selectedModuleId"
+        [org_id]="selectedOrgId"
+        >
+      </app-dynamic-form>
+    </div>
+
+  </div>
+</div>
