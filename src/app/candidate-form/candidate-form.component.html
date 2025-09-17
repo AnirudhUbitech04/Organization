@@ -1,0 +1,264 @@
+<div class="container py-5">
+
+  <!-- Modern Step Progress Indicator -->
+  <div class="d-flex justify-content-center align-items-center mb-5 stepper-wrapper">
+    <ng-container *ngFor="let label of ['Personal Info', 'Additional Details', 'Preview']; let i = index">
+      <div class="text-center position-relative stepper-item">
+        <div 
+          class="step-circle"
+          [ngClass]="{
+            'active': step === i + 1,
+            'completed': step > i + 1
+          }">
+          {{ i + 1 }}
+        </div>
+        <small class="step-label text-muted">{{ label }}</small>
+        <div *ngIf="i < 2" class="step-line"></div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Floating Pie Chart -->
+  <div class="position-absolute top-0 end-0 m-5 pie-chart-container">
+    <canvas baseChart
+            [data]="pieChartData"
+            [options]="pieChartOptions"
+            [type]="pieChartType">
+    </canvas>
+    <div class="chart-percent">
+      {{ pieChartData.datasets[0].data[0] }}%
+    </div>
+  </div>
+
+  <!-- Card Container -->
+  <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 position-relative bg-white">
+
+    <!-- Step 1 -->
+    <div *ngIf="step === 1">
+      <h3 class="mb-4 text-primary fw-semibold">Personal Information</h3>
+      <form [formGroup]="personalForm">
+        <div class>
+          <div class="">
+            <label class="form-label">Full Name *</label>
+            <input type="text" class="form-control" formControlName="full_name">
+          </div>
+          <div class="">
+            <label class="form-label">Email Address *</label>
+            <input type="email" class="form-control" formControlName="email">
+          </div>
+          <div class="">
+            <label class="form-label">Phone Number *</label>
+            <input type="text" class="form-control" formControlName="phone">
+          </div>
+        </div>
+      </form>
+      <div class="mt-4 d-flex justify-content-end">
+        <button class="btn btn-primary px-4" (click)="nextStep()" [disabled]="!personalForm.valid">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div *ngIf="step === 2">
+      <h3 class="mb-4 text-primary fw-semibold">Additional Details</h3>
+      <form [formGroup]="detailsForm">
+        <div class="mb-3">
+          <label class="form-label">Address *</label>
+          <textarea rows="2" class="form-control" formControlName="address"></textarea>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <label class="form-label">Country *</label>
+            <select class="form-select" formControlName="country_id" (change)="onCountryChange($event)">
+              <option value="">Select Country</option>
+              <option *ngFor="let c of countries" [value]="c.id">{{ c.country_name }}</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">State *</label>
+            <select class="form-select" formControlName="state_id" (change)="onStateChange($event)">
+              <option value="">Select State</option>
+              <option *ngFor="let s of states" [value]="s.id">{{ s.state_name }}</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">City *</label>
+            <select class="form-select" formControlName="city_id">
+              <option value="">Select City</option>
+              <option *ngFor="let c of cities" [value]="c.id">{{ c.city_name }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row g-4 mt-2">
+          <div class="col-md-6">
+            <label class="form-label">Pincode *</label>
+            <input type="text" class="form-control" formControlName="pincode">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Profile Image *</label>
+            <input type="file" class="form-control" (change)="onFileChange($event)">
+          </div>
+        </div>
+      </form>
+      <div class="mt-4 d-flex justify-content-between">
+        <button class="btn btn-secondary" (click)="prevStep()">Previous</button>
+        <button class="btn btn-primary px-4" (click)="nextStep()" [disabled]="!detailsForm.valid">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div *ngIf="step === 3">
+      <h3 class="mb-4 text-primary fw-semibold">Review Your Information</h3>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <h6 class="text-muted">Personal Information</h6>
+          <p><strong>Name:</strong> {{reviewData.full_name}}</p>
+          <p><strong>Email:</strong> {{reviewData.email}}</p>
+          <p><strong>Phone:</strong> {{reviewData.phone}}</p>
+        </div>
+        <div class="col-md-6 mb-3">
+          <h6 class="text-muted">Address Information</h6>
+          <p><strong>Address:</strong> {{reviewData.address}}</p>
+          <p><strong>Country:</strong> {{reviewData.country_name}}</p>
+          <p><strong>State:</strong> {{reviewData.state_name}}</p>
+          <p><strong>City:</strong> {{reviewData.city_name}}</p>
+          <p><strong>Pincode:</strong> {{reviewData.pincode}}</p>
+        </div>
+      </div>
+      <div class="mb-4">
+        <h6 class="text-muted">Profile Image</h6>
+        <img *ngIf="imagePreview" [src]="imagePreview" class="img-thumbnail rounded shadow-sm" width="150">
+      </div>
+      <div class="d-flex justify-content-between">
+        <button class="btn btn-secondary" (click)="prevStep()">Previous</button>
+        <button class="btn btn-success px-4" (click)="submitForm()">Submit</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<!-- <div class="container mt-4">
+  
+
+  <div class="d-flex justify-content-center mb-4">
+    <div class="step-item" [class.completed]="step>1" [class.active]="step===1">
+      <div class="circle">1</div>
+      <div>Personal Info</div>
+    </div>
+    <div class="line"></div>
+    <div class="step-item" [class.completed]="step>2" [class.active]="step===2">
+      <div class="circle">2</div>
+      <div>Additional Details</div>
+    </div>
+    <div class="line"></div>
+    <div class="step-item" [class.active]="step===3">
+      <div class="circle">3</div>
+      <div>Preview</div>
+    </div>
+  </div>
+
+  <div class="card shadow p-4 position-relative">
+
+   
+    <div class="pie-chart-container position-absolute top-0 end-0 p-3">
+      <canvas baseChart
+              [data]="pieChartData"
+              [options]="pieChartOptions"
+              [type]="pieChartType">
+      </canvas>
+      <div class="pie-percent">{{ pieChartData.datasets[0].data[0] }}%</div>
+    </div>
+
+ 
+    <div *ngIf="step===1">
+      <h4 class="mb-3">Personal Information</h4>
+      <form [formGroup]="personalForm">
+        <div class="mb-3">
+          <label>Full Name *</label>
+          <input class="form-control" formControlName="full_name">
+        </div>
+        <div class="mb-3">
+          <label>Email Address *</label>
+          <input class="form-control" formControlName="email">
+        </div>
+        <div class="mb-3">
+          <label>Phone Number *</label>
+          <input class="form-control" formControlName="phone">
+        </div>
+      </form>
+      <button class="btn btn-primary mt-3" (click)="nextStep()" [disabled]="!personalForm.valid">Next</button>
+    </div>
+
+
+    <div *ngIf="step===2">
+      <h4 class="mb-3">Additional Details</h4>
+      <form [formGroup]="detailsForm">
+        <div class="mb-3">
+          <label>Address *</label>
+          <textarea class="form-control" formControlName="address"></textarea>
+        </div>
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label>Country *</label>
+            <select class="form-control" formControlName="country_id" (change)="onCountryChange($event)">
+              <option value="">Select Country</option>
+              <option *ngFor="let c of countries" [value]="c.id">{{c.country_name}}</option>
+            </select>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label>State *</label>
+            <select class="form-control" formControlName="state_id" (change)="onStateChange($event)">
+              <option value="">Select State</option>
+              <option *ngFor="let s of states" [value]="s.id">{{s.state_name}}</option>
+            </select>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label>City *</label>
+            <select class="form-control" formControlName="city_id">
+              <option value="">Select City</option>
+              <option *ngFor="let c of cities" [value]="c.id">{{c.city_name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label>Pincode *</label>
+          <input class="form-control" formControlName="pincode">
+        </div>
+        <div class="mb-3">
+          <label>Profile Image *</label>
+          <input type="file" class="form-control" (change)="onFileChange($event)">
+        </div>
+      </form>
+      <button class="btn btn-secondary me-1" (click)="prevStep()">Previous</button>
+      <button class="btn btn-primary" (click)="nextStep()" [disabled]="!detailsForm.valid">Next</button>
+    </div>
+
+  
+    <div *ngIf="step===3">
+      <h4 class="mb-3">Review Your Information</h4>
+      <div class="mb-3">
+        <h6>Personal Information</h6>
+        <p><b>Name:</b> {{reviewData.full_name}}</p>
+        <p><b>Email:</b> {{reviewData.email}}</p>
+        <p><b>Phone:</b> {{reviewData.phone}}</p>
+      </div>
+      <div class="mb-3">
+        <h6>Address Information</h6>
+        <p><b>Address:</b> {{reviewData.address}}</p>
+        <p><b>Country:</b> {{reviewData.country_name}}</p>
+        <p><b>State:</b> {{reviewData.state_name}}</p>
+        <p><b>City:</b> {{reviewData.city_name}}</p>
+        <p><b>Pincode:</b> {{reviewData.pincode}}</p>
+      </div>
+      <div class="mb-3">
+        <h6>Profile Image</h6>
+        <img *ngIf="imagePreview" [src]="imagePreview" class="img-thumbnail" width="150">
+      </div>
+      <button class="btn btn-secondary me-1" (click)="prevStep()">Previous</button>
+      <button class="btn btn-success" (click)="submitForm()">Submit</button>
+    </div>
+
+  </div>
+</div> -->

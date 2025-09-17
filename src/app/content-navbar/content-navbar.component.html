@@ -1,0 +1,83 @@
+<!-- Modern Filter Navbar -->
+<nav class="navbar navbar-expand-lg mb-4 rounded shadow-sm px-3" 
+     >
+     <!-- style="background: linear-gradient(90deg, #007bff, #6610f2);" -->
+  <div class="container-fluid justify-content-center gap-2 flex-wrap">
+    <button class="btn btn-warning fw-semibold" 
+            [ngClass]="{'active-btn btn-warning text-dark': activeFilter==='pending'}"
+            (click)="updateChart('pending')">
+      Pending
+    </button>
+    <button class="btn btn-success fw-semibold" 
+            [ngClass]="{'active-btn btn-success text-white': activeFilter==='complete'}"
+            (click)="updateChart('complete')">
+      Complete
+    </button>
+    <button class="btn btn-danger fw-semibold" 
+            [ngClass]="{'active-btn btn-danger text-white': activeFilter==='overdue'}"
+            (click)="updateChart('overdue')">
+      Overdue
+    </button>
+    <button class="btn btn-secondary fw-semibold" 
+            [ngClass]="{'active-btn btn-primary text-white': activeFilter==='all'}"
+            (click)="updateChart('all')">
+      All
+    </button>
+  </div>
+</nav>
+
+<!-- Chart Section -->
+<div class="card shadow-sm rounded-4 p-4 mb-4 chart-container border-0">
+  <h5 class="fw-semibold mb-3">Task Distr.</h5>
+  <canvas baseChart [data]="chartData" [type]="chartType"></canvas>
+</div>
+
+<!-- Filtered Task Table -->
+<div *ngIf="filteredList.length" class="card shadow rounded-4 p-4 table-modern-container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="fw-bold mb-0"> Filtered Tasks</h5>
+    <span class="badge bg-info text-dark">{{ filteredList.length }} Tasks</span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-borderless align-middle table-modern">
+      <thead class="table-head-custom">
+        <tr>
+          <th scope="col">Task</th>
+          <th scope="col">Start</th>
+          <th scope="col">End</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of filteredList" class="task-row">
+          <td>
+            <div class="fw-medium text-danger">{{ task.name }}</div>
+          </td>
+          <td>
+            <span class="text-muted small">{{ task.start_time }}</span>
+          </td>
+          <td>
+            <span class="text-muted small">{{ task.end_time }}</span>
+          </td>
+          <td>
+            <span class="badge px-3 py-2 rounded-pill"
+                  [ngClass]="{
+                    'bg-warning text-dark': task.status === 'pending',
+                    'bg-success': task.status === 'complete',
+                    'bg-danger': task.status === 'overdue'
+                  }">
+              {{ task.status | titlecase }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Empty State -->
+<div *ngIf="filteredList.length === 0" class="text-center text-muted p-4 border rounded bg-light">
+  <i class="bi bi-inbox-fill fs-3 d-block mb-2"></i>
+  No tasks to display.
+</div>

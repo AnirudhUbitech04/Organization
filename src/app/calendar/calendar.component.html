@@ -1,0 +1,58 @@
+
+<div *ngIf="!todoOpen && !showChart" class="container mt-4">
+  <div class="card shadow-lg calendar-card mx-auto">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <button class="btn btn-light" (click)="prevMonth()">&#8249;</button>
+        <h4 class="mb-0">{{ monthNames[currentMonth] }} {{ currentYear }}</h4>
+        <button class="btn btn-light" (click)="nextMonth()">&#8250;</button>
+      </div>
+
+      <div class="row text-center fw-bold small text-muted border-bottom pb-2">
+        <div class="col" *ngFor="let day of weekDays">{{ day }}</div>
+      </div>
+
+      <div class="row text-center">
+        <div class="col-1 day-card" *ngFor="let day of calendarDays"
+          [class.selected]="selectedDate === day.fullDate"
+          [class.today]="isToday(day.fullDate)"
+          [class.has-log]="hasLog(day.fullDate)"
+          (click)="selectDate(day.fullDate)">
+          <div *ngIf="day.date" class="day-number">{{ day.date }}</div>
+        </div>
+      </div>
+
+      <div *ngIf="selectedDate && logs.length" class="mt-3">
+        <h5>Logs for {{ selectedDate }}</h5>
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let log of logs">
+            <strong>Login:</strong> {{ log.login_time || 'Not logged' }} |
+            <strong>Logout:</strong> {{ log.logout_time || 'Not logged' }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+ <button class="btn btn-primary fab mt-3" (click)="openTodoList()">Next</button>
+</div>
+
+
+<div *ngIf="todoOpen">
+  <app-todo 
+    [todoList]="todoList" 
+    (backToCalendar)="todoOpen = false" 
+    (openNavbar)="openChartPage()"
+    >
+    
+  </app-todo>
+</div>
+
+
+<div *ngIf="showChart">
+  <app-content-navbar [todoList]="todoList"></app-content-navbar>
+  <div class="text-center mt-3">
+    <button class="btn btn-secondary" (click)="todoOpen = true; showChart = false;">
+      Back to Todo
+    </button>
+  </div>
+</div> 

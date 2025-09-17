@@ -1,0 +1,43 @@
+/* Highlighted active filter button */
+.active-btn {
+  border: none !important;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Chart container spacing */
+.chart-container {
+  background-color: #fefefe;
+  width: 25%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Table improvements */
+.table-container {
+  background-color: #ffffff;
+}
+
+/* Zebra stripes */
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+/* Smooth transition */
+button,
+.badge {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navbar .btn {
+    width: 50%;
+    margin-bottom: 0.5rem;
+  }
+
+  .chart-container,
+  .table-container {
+    padding: 1.5rem;
+  }
+}

@@ -1,0 +1,114 @@
+
+<div class="card shadow rounded-4 p-4 mt-4 bg-light todo-container">
+
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0 fw-bold"> To-Do Tasks</h4>
+    <div>
+      <button class="btn btn-outline-secondary me-2" (click)="goBack()"> Back </button>
+      <button class="btn btn-outline-primary" (click)="goToChart()"> Go to Chart</button>
+    </div>
+  </div>
+
+  <!-- Add Task -->
+  <div class="row g-2 align-items-end mb-4">
+    <div class="col-md-4">
+      <label class="form-label fw-medium">Task Name</label>
+      <input class="form-control" placeholder="e.g., Team Meeting" [(ngModel)]="newTask.name" />
+    </div>
+    <div class="col-md-3">
+      <label class="form-label fw-medium">Start Date</label>
+      <input type="date" class="form-control" [(ngModel)]="newTask.start_time" />
+    </div>
+    <div class="col-md-3">
+      <label class="form-label fw-medium">End Date</label>
+      <input type="date" class="form-control" [(ngModel)]="newTask.end_time" />
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-success w-100 mt-md-4" (click)="addTask()">Add Task</button>
+    </div>
+  </div>
+
+  <!--  Task Table -->
+  <div class="table-responsive">
+    <table class="table table-hover align-middle shadow-sm rounded">
+      <thead class="table-light">
+        <tr class="text-center">
+          <th> Task</th>
+          <th> Start Date</th>
+          <th> End Date</th>
+          <th> Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of todoList" class="text-center">
+          <td>{{ task.name }}</td>
+          <td>{{ task.start_time }}</td>
+          <td>{{ task.end_time }}</td>
+          <td>
+            <select class="form-select form-select-sm w-auto mx-auto"
+                    [(ngModel)]="task.status"
+                    (change)="updateTaskStatus(task)">
+              <option class="btn-warning" value="pending"> Pending</option>
+              <option class="btn-success" value="complete"> Complete</option>
+              <option class="btn-danger" value="overdue"> Overdue</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+
+
+
+<!-- <div class="card shadow-lg p-3 mt-4">
+  <h4>To-Do List</h4>
+
+  <div class="d-flex justify-content-end mb-2">
+    <button class="btn btn-secondary me-2" (click)="goBack()">Back to Calendar</button>
+    <button class="btn btn-primary" (click)="goToChart()">Go to Navbar</button>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <input class="form-control" placeholder="Task" [(ngModel)]="newTask.name" />
+    </div>
+    <div class="col-md-3">
+      <input type="date" class="form-control" [(ngModel)]="newTask.start_time" />
+    </div>
+    <div class="col-md-3">
+      <input type="date" class="form-control" [(ngModel)]="newTask.end_time" />
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-success w-100" (click)="addTask()">Add</button>
+    </div>
+  </div>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of todoList">
+        <td>{{ task.name }}</td>
+        <td>{{ task.start_time }}</td>
+        <td>{{ task.end_time }}</td>
+        <td>
+          <select class="form-select" [(ngModel)]="task.status" (change)="updateTaskStatus(task)">
+            <option value="pending">Pending</option>
+            <option value="complete">Complete</option>
+            <option value="overdue">Overdue</option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->

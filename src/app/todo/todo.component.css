@@ -1,0 +1,29 @@
+.todo-container {
+  background: #f8f9fc;
+  border: 1px solid #e3e6f0;
+}
+
+.table thead th {
+  font-weight: 600;
+  color: #495057;
+  background-color: #f1f3f5;
+}
+
+.table tbody td {
+  vertical-align: middle;
+}
+
+select.form-select {
+  min-width: 120px;
+}
+
+button.btn-outline-primary,
+button.btn-outline-secondary {
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .todo-container .row.g-2 {
+    flex-direction: column;
+  }
+}

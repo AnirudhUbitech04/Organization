@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'organization';
+  title = 'new_task';
+
+    @HostListener('window:beforeunload', ['$event'])
+  handleBeforeUnload(event: Event) {
+    if (localStorage.getItem('token')) {
+      event.preventDefault();
+      (event as BeforeUnloadEvent).returnValue = 'You must log out before closing!';
+    }
+  }
 }

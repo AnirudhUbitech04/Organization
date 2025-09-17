@@ -1,66 +1,55 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';   
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../user.service';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html'
 })
 export class LoginComponent {
-  loginForm: FormGroup;
-  message: string = '';
-  
+  formData = {
+    org_name: '',
+    email: '',
+    password: ''
+  };
 
-  constructor(private fb: FormBuilder, private userService: UserService, private router: Router) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });
-  }
+  constructor(private authService: AuthService, private router: Router) {}
 
-  onSubmit() {
-    if (this.loginForm.invalid) return;
+  login() {
     const today = new Date();
-  const day = today.getDay(); 
-  const date = today.getDate();    
-  const month = today.getMonth(); 
-  const year = today.getFullYear();
-
-  if (day === 0) { 
-    alert("Today is Sunday..");
-    return;
-  }
-   if (day === 6) {
-   
-    const saturdayCount = Math.floor((date + (new Date(year, month, 1).getDay() - 6 + 7) % 7 - 1) / 7) + 1;
-    if (saturdayCount === 1) {
-      alert("Today is the 1st Saturday of the month. Login not possible.");
+    const day = today.getDay();
+    const date = today.getDate(); 
+    
+    if (day === 0) {
+      alert('Today is Sunday, login is not allowed!');
       return;
     }
-    if (saturdayCount === 3) {
-      alert("Today is the 3rd Saturday of the month. Login not possible.");
-      return;
-    }
-  }
 
-    this.userService.login(this.loginForm.value).subscribe({
-      next: (res) => {
-        if (res.success) {
-          console.log('User:', res.user);
-          sessionStorage.setItem('user', JSON.stringify(res.user));
-          this.message = res.message;
-          this.router.navigate(['/sidebar']);
+
+    if (day === 6) {
+     
+      const weekOfMonth = Math.ceil(date / 7);
+      if (weekOfMonth === 1 || weekOfMonth === 3) {
+        alert('Login is not allowed on 1st and 3rd Saturday!');
+        return;
+      }
+    }
+
+    this.authService.login(this.formData).subscribe({
+      next: (res: any) => {
+        if (res.status === 'success') {
+          this.authService.saveSession(res.token, res.user);
+          this.router.navigate(['/dashboard']);
         } else {
-          this.message = res.message;
+          alert('Login failed: ' + res.message);
         }
       },
       error: (err) => {
-        this.message = err.error.message || 'Login failed';
+        alert(err.error?.message || 'Login failed');
       }
     });
   }
-
-    
-  }
-
+}

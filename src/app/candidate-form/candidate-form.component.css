@@ -1,0 +1,70 @@
+/* Step Progress Indicator */
+.stepper-wrapper {
+  position: relative;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.stepper-item {
+  position: relative;
+  flex: 1;
+  min-width: 120px;
+}
+
+.step-circle {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  color: #6c757d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  font-weight: 600;
+  font-size: 1.1rem;
+  z-index: 2;
+  transition: 0.3s;
+}
+
+.step-circle.active {
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+.step-circle.completed {
+  background-color: #198754;
+  color: #fff;
+}
+
+.step-label {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.step-line {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  right: -50%;
+  height: 4px;
+  background-color: #dee2e6;
+  z-index: 1;
+}
+
+/* Chart Container */
+.pie-chart-container {
+  width: 120px;
+  height: 120px;
+  z-index: 3;
+}
+
+.chart-percent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: #0d6efd;
+}
